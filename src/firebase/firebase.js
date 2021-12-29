@@ -23,9 +23,9 @@ const firebaseConfig = {
   appId: "1:654452966392:web:ec966380262ecfbc63cc0d",
   measurementId: "G-NRG96ZY926"
 };
-var admin = require("firebase-admin");
+// var admin = require("firebase-admin");
 
-var serviceAccount = require("path/to/serviceAccountKey.json");
+// var serviceAccount = require("path/to/serviceAccountKey.json");
 
 // admin.initializeApp({
 //   credential: admin.credential.cert(serviceAccount),
