@@ -22,6 +22,7 @@ import Divider from "@material-ui/core/Divider";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { useSelector, useDispatch } from "react-redux";
 import { signOut } from "../Actions";
+import auth from "../firebase/firebase";
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -108,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Nav() {
   const classes = useStyles();
   const user = useSelector((state) => state.auth);
-
+console.log(user.user);
   const dispatch = useDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -153,7 +154,7 @@ export default function Nav() {
             </Link>
 
             <div className={classes.authButtons}>
-              {user.user && user.user.role === "admin" ? (
+              {user.user ? (
                 <>
                   <Link to="/productList" className={classes.link}>
                     Product List

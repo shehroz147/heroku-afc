@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,onPress } from "react";
 import history from "../../history";
-import {auth,storage } from '../../firebase/firebase';
+import {storage,auth } from '../../firebase/firebase';
 import { useDispatch, useSelector } from "react-redux";
 import Avatar from "@material-ui/core/Avatar";
 // import CancelIcon from "@material-ui/icons/Cancel";
@@ -16,7 +16,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
-
+// import {onPress} from "react-native";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -80,22 +80,16 @@ const useStyles = makeStyles((theme) => ({
 export default function AddProduct() {
   const user = useSelector((state) => state.auth);
   const categoryList = [
-    { id: 1, name: "Ice Cream -Scoop" },
-    { id: 2, name: "Ice Cream - Karen's Kulfi" },
-    { id: 3, name: "HAMZA SPECIAL TEA" },
-    { id: 4, name: "PAAN" },
-    { id: 5, name: "FOOD" },
-    { id: 6, name: "Ice Cream - Tubs" },
-    { id: 7, name: "FALOODA" },
-    { id: 8, name: "SHAKES" },
-    { id: 9, name: "HAMZA SPECIAL JUICE" },
-    { id: 10, name: "FRESH JUICES" },
-    { id: 11, name: "SOUP" },
-    { id: 12, name: "CHAAT" },
+    { id: 1, name: "Poultry" },
+    { id: 2, name: "Lamb" },
+    { id: 3, name: "Mutton" },
+    { id: 4, name: "Beef" },
+    { id: 5, name: "Offal" },
+    { id: 6, name: "Marrinated" },
   ];
 
   useEffect(() => {
-    const token = window.localStorage.getItem("hamzaFlawsToken");
+    const token = window.localStorage.getItem("afcToken");
 
     if (!token || !user.role === "admin") {
       return history.push("/");
@@ -115,33 +109,32 @@ export default function AddProduct() {
 
   let validationSchema = yup.object({
     title: yup.string().required("Product name is required"), //maximum number of letters .max(54,"name cannot be more then 54 charcters long")
-    // price: yup.number().notRequired("price is required"),
+    price: yup.number().notRequired("price is required"),
     category: yup.string().required("category is required"),
-    largePrice: yup.number().notRequired("largePrice is required"),
-    regularPrice: yup
-      .number()
-      .notRequired(
-        "regularPrice is not only apply if you want to offer regularPrice"
-      ),
-    priceToBeAdded: yup.number().notRequired("size is required"),
+    imageUrl:yup.string().required("imageUrl is required")
+    // largePrice: yup.number().notRequired("largePrice is required"),
+    // regularPrice: yup
+    //   .number()
+    //   .notRequired(
+    //     "regularPrice is not only apply if you want to offer regularPrice"
+    //   ),
+    // priceToBeAdded: yup.number().notRequired("size is required"),
   });
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
         title: "",
-        // price: "",
+        price: "",
         category: "",
-        largePrice: "",
-        regularPrice: "",
-        priceToBeAdded: "",
+        imageUrl:"",
+        // largePrice: "",
+        // regularPrice: "",
+        // priceToBeAdded: "",
         // size: "",
       },
       enableReinitialize: true,
       validationSchema,
       onSubmit: async (values, { resetForm }) => {
-
-        
-        
         auth.signInAnonymously()
   .then(() => {
     // Signed in..
@@ -156,7 +149,7 @@ export default function AddProduct() {
           setFiles(null);
           setURL(url); 
           alert(url)
-
+          console.log(data);
           const data = new FormData();
 
 
@@ -208,7 +201,7 @@ export default function AddProduct() {
           </Box>
         ) : (
           <Box width="85%" className={classes.addProductForm}>
-            <form onSubmit={handleSubmit}>
+            <form>
               <TextField
                 id="outlined-required"
                 label="Title"
@@ -277,7 +270,7 @@ export default function AddProduct() {
               category === "HAMZA SPECIAL JUICE" ||
               category === "CHAAT" ||
               category === "SOUP" ? ( */}
-              <Box className={classes.show}>
+              {/* <Box className={classes.show}>
                 <Box width="50%">
                   <TextField
                     variant="outlined"
@@ -314,11 +307,11 @@ export default function AddProduct() {
                     fullWidth
                   />
                 </Box>
-              </Box>
+              </Box> */}
               {/* ) : (
                 ""
               )} */}
-              {values.category === "Ice Cream -Scoop" ? (
+              {/* {values.category === "Ice Cream -Scoop" ? (
                 <TextField
                   id="standard-multiline-static"
                   label="Scoop Price To be added"
@@ -344,7 +337,7 @@ export default function AddProduct() {
                 />
               ) : (
                 ""
-              )}
+              )} */}
               <Box mt={2}>
                 <input
                   accept="image/*"
@@ -394,6 +387,7 @@ export default function AddProduct() {
 
               <Box mt={2} mb={1}>
                 <Button
+                  onPress={handleSubmit}
                   variant="outlined"
                   color="primary"
                   style={{ borderRadius: "50px" }}

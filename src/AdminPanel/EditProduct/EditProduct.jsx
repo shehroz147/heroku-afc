@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { editProduct } from "../../Actions";
 import { FileResize } from "../../utils/ImageCompressor";
-
+import { auth } from "../../firebase/firebase";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
@@ -68,24 +68,24 @@ export default function EditProduct(props) {
     title: "",
     price: "",
     category: "",
-    largePrice: "",
-    regularPrice: "",
-    priceToBeAdded: "",
+    // largePrice: "",
+    // regularPrice: "",
+    // priceToBeAdded: "",
     imageUrl: "",
   });
   const categoryList = [
-    { id: 1, name: "Ice Cream -Scoop" },
-    { id: 2, name: "Ice Cream - Karen's Kulfi" },
-    { id: 3, name: "HAMZA SPECIAL TEA" },
-    { id: 4, name: "PAAN" },
-    { id: 5, name: "FOOD" },
-    { id: 6, name: "Ice Cream - Tubs" },
-    { id: 7, name: "FALOODA" },
-    { id: 8, name: "SHAKES" },
-    { id: 9, name: "HAMZA SPECIAL JUICE" },
-    { id: 10, name: "FRESH JUICES" },
-    { id: 11, name: "SOUP" },
-    { id: 12, name: "CHAAT" },
+    { id: 1, name: "Poultry" },
+    { id: 2, name: "Lamb" },
+    { id: 3, name: "Mutton" },
+    { id: 4, name: "Beef" },
+    { id: 5, name: "Offal" },
+    { id: 6, name: "Marinated" },
+    // { id: 7, name: "FALOODA" },
+    // { id: 8, name: "SHAKES" },
+    // { id: 9, name: "HAMZA SPECIAL JUICE" },
+    // { id: 10, name: "FRESH JUICES" },
+    // { id: 11, name: "SOUP" },
+    // { id: 12, name: "CHAAT" },
   ];
 
   const [selectedFiles, setFiles] = useState(null);
@@ -96,7 +96,7 @@ export default function EditProduct(props) {
   const classes = useStyles();
 
   useEffect(() => {
-    const token = window.localStorage.getItem("hamzaFlawsToken");
+    const token = window.localStorage.getItem("afcToken");
 
     if (!token || !user.role === "admin") {
       return history.push("/");
@@ -104,7 +104,7 @@ export default function EditProduct(props) {
   });
   useEffect(() => {
     server
-      .get(`/shop/getProduct/${props.match.params.id}`)
+      .get(`/admin/shop/getProduct/${props.match.params.id}`)
       .then((res) => {
         setProduct(res.data);
       })
@@ -119,13 +119,13 @@ export default function EditProduct(props) {
     title: yup.string().required("Product name is required"), //maximum number of letters .max(54,"name cannot be more then 54 charcters long")
     price: yup.number().notRequired("price is required"),
     category: yup.string().required("category is required"),
-    largePrice: yup.number().notRequired("largePrice is required"),
-    regularPrice: yup
-      .number()
-      .notRequired(
-        "regularPrice is not only apply if you want to offer regularPrice"
-      ),
-    priceToBeAdded: yup.number().notRequired("size is required"),
+    // largePrice: yup.number().notRequired("largePrice is required"),
+    // regularPrice: yup
+    //   .number()
+    //   .notRequired(
+    //     "regularPrice is not only apply if you want to offer regularPrice"
+      // ),
+  //   priceToBeAdded: yup.number().notRequired("size is required"),
   });
   const {
     values,
@@ -139,9 +139,9 @@ export default function EditProduct(props) {
       title: product.title,
       price: product.price ? product.price : "",
       category: product.category,
-      largePrice: product.largePrice ? product.largePrice : "",
-      regularPrice: product.regularPrice ? product.regularPrice : "",
-      priceToBeAdded: product.priceToBeAdded ? product.priceToBeAdded : "",
+      // largePrice: product.largePrice ? product.largePrice : "",
+      // regularPrice: product.regularPrice ? product.regularPrice : "",
+      // priceToBeAdded: product.priceToBeAdded ? product.priceToBeAdded : "",
     },
     enableReinitialize: true,
     validationSchema,
@@ -173,11 +173,11 @@ export default function EditProduct(props) {
             </Box>
           </Box>
         ) : (
-          <Box width="85%" className={classes.addProductForm}>
+          <Box width="60%" className={classes.addProductForm}>
             <form onSubmit={handleSubmit}>
               <TextField
                 id="outlined-required"
-                label="Title"
+                label="Product Name"
                 name="title"
                 variant="outlined"
                 fullWidth
@@ -189,8 +189,8 @@ export default function EditProduct(props) {
                 error={errors.title && touched.title ? true : false}
                 helperText={errors.title && touched.title ? errors.title : ""}
               />
-              <Box mt={1} mb={1}>
-                <Box width="100%">
+              <Box mt={2} mb={1}>
+                <Box width ="60%">
                   <FormControl variant="outlined">
                     <InputLabel id="demo-simple-select-outlined-label">
                       Category
@@ -243,7 +243,7 @@ export default function EditProduct(props) {
               category === "HAMZA SPECIAL JUICE" ||
               category === "CHAAT" ||
               category === "SOUP" ? ( */}
-              <Box className={classes.show}>
+              {/* <Box className={classes.show}>
                 <Box width="50%">
                   <TextField
                     variant="outlined"
@@ -284,7 +284,7 @@ export default function EditProduct(props) {
               {/* ) : (
                 ""
               )} */}
-              <TextField
+              {/* <TextField
                 id="standard-multiline-static"
                 label="Scoop Price To be added"
                 name="priceToBeAdded"
@@ -304,7 +304,7 @@ export default function EditProduct(props) {
                     ? errors.priceToBeAdded
                     : ""
                 }
-              />
+              />  */}
 
               <Box mt={2}>
                 <input
@@ -323,7 +323,7 @@ export default function EditProduct(props) {
                     component="span"
                     startIcon={<CloudUploadIcon />}
                   >
-                    upload
+                    Upload
                   </Button>
                 </label>
               </Box>

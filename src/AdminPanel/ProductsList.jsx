@@ -11,6 +11,17 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Pagination from "../Components/Pagination";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
+import {createProduct} from "../Actions";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+// import { baseUrl } from "../apis/server";
+// import Avatar from "@material-ui/core/Avatar";
+import TableCell from "@material-ui/core/TableCell";
+// import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+
+
 import _ from "lodash";
 
 import Container from "@material-ui/core/Container";
@@ -28,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
   },
   table: {
     minWidth: 650,
+    marginTop:100,
+    marginLeft:200,
+    textAlign:'centre'
   },
   square: {
     width: theme.spacing(11),
@@ -44,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ProductsList() {
   const classes = useStyles();
   const user = useSelector((state) => state.auth);
+  // console.log("user = ",user);
   const productData = useSelector((state) => state.posts);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,8 +70,9 @@ export default function ProductsList() {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+  // console.log(productData)
   useEffect(() => {
-    const token = window.localStorage.getItem("hamzaFlawsToken");
+    const token = window.localStorage.getItem("afcToken");
     // console.log(!token || user.role === "user");
     if (!token || !user.role === "admin") {
       return history.push("/");
@@ -67,7 +83,6 @@ export default function ProductsList() {
     // }
     // setLoading(false);
   }, [setLoading, productData, user]);
-
   const handleProductEdit = (id) => {
     history.push(`/admin/editProduct/${id}`);
   };
@@ -80,8 +95,9 @@ export default function ProductsList() {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   let currentProducts = [];
+  // console.log(productData);
   if (!_.isEmpty(productData)) {
-    currentProducts = productData.products.slice(
+    currentProducts = productData.result.slice(
       indexOfFirstPost,
       indexOfLastPost
     );
@@ -101,8 +117,10 @@ export default function ProductsList() {
         <Grid container direction="row" justify="center" alignItems="center">
           You have not added any product yet
         </Grid>
+                
       ) : (
         currentProducts.map((product) => {
+          console.log(product);
           return (
             <Accordion
               expanded={expanded === product._id}
@@ -114,18 +132,22 @@ export default function ProductsList() {
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
               >
-                <Typography className={classes.heading}>
+                <Typography style={{marginRight:1000,marginTop:12}} className={classes.heading}>
                   {product.title}
                 </Typography>
                 <Typography className={classes.secondaryHeading}>
                   <IconButton
                     variant="outlined"
+                    color="primary"
                     onClick={() => handleProductEdit(product._id)}
                   >
                     <EditIcon />
                   </IconButton>
                   <IconButton
-                    variant="outlined"
+                  aria-label="delete"
+                  color="secondary"
+                    // variant="outlined"
+                    // color="primary"
                     onClick={() => handleProductDelete(product._id)}
                   >
                     <DeleteIcon />
@@ -134,16 +156,17 @@ export default function ProductsList() {
               </AccordionSummary>
               <AccordionDetails>
                 <ProductDetails product={product} />
+                {/* console.log(product); */}
               </AccordionDetails>
             </Accordion>
           );
         })
       )}
 
-      {!_.isEmpty(productData) && productData.products.length > postsPerPage ? (
+      {!_.isEmpty(productData) && productData.result.length > postsPerPage ? (
         <Pagination
           postsPerPage={postsPerPage}
-          totalPosts={productData.products.length}
+          totalPosts={productData.result.length}
           paginate={paginate}
         />
       ) : (

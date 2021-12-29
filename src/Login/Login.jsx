@@ -82,8 +82,11 @@ export default function Login() {
     onSubmit: async (values, { resetForm }) => {
       setLoading(true);
       try {
-        const { data } = await server.post("/login", values);
-        dispatch(signIn(data.user, data.token));
+        const { data } = await server.post("admin/login", values);
+        dispatch(signIn(data.result._id, data.token));
+        // console.log(data.user);
+        // console.log(data.result._id);
+        // console.log(data);
         setLoading(false);
         resetForm({
           values: "",
@@ -133,6 +136,7 @@ export default function Login() {
                   src={process.env.PUBLIC_URL + "./logo.png"}
                   className={classes.large}
                 />
+                {/* <Avatar.Image size={24} source={require('../assets/avatar.png')} */} 
               </Grid>
             </Box>
             {/* <Box></Box> */}

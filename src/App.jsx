@@ -21,7 +21,7 @@ export default function App() {
 
   useEffect(() => {
     dispatch(fetchProducts());
-    const token = window.localStorage.getItem("hamzaFlawsToken");
+    const token = window.localStorage.getItem("afcToken");
     if (token) {
       dispatch(loggedInUser());
     }
@@ -36,7 +36,6 @@ export default function App() {
             <Route exact path="/orders" component={Orders} />
             <Route exact path="/productList" component={ProductList} />
             <Route exact path="/addProduct" component={AddProduct} />
-
             <Route
               exact
               path="/admin/editProduct/:id"

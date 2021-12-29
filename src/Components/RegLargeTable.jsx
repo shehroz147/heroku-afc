@@ -45,11 +45,11 @@ export default function RegLargeTable({ product }) {
               <Typography variant="button">Product Title</Typography>
             </TableCell>
             <TableCell align="center">
-              <Typography variant="button">Regular Product Price</Typography>
+              <Typography variant="button">Product Price</Typography>
             </TableCell>
-            <TableCell align="center">
+            {/* <TableCell align="center">
               <Typography variant="button">Large Product Price</Typography>
-            </TableCell>
+            </TableCell> */}
           </TableRow>
         </TableHead>
 
@@ -57,14 +57,14 @@ export default function RegLargeTable({ product }) {
           <TableRow key={product._id}>
             <TableCell component="th" scope="row">
               <Avatar
-                src={product?.productId?.imageUrl}
+                src={product.imageUrl}
                 variant="square"
                 className={classes.square}
               ></Avatar>
             </TableCell>
-            <TableCell align="center">{product?.productId?.category}</TableCell>
-            <TableCell align="center">{product?.productId?.regularPrice}</TableCell>
-            <TableCell align="center">{product?.productId?.largePrice}</TableCell>
+            <TableCell align="center">{product.title}</TableCell>
+            <TableCell align="center">{product.price}</TableCell>
+            {/* <TableCell align="center">{product?.productId?.largePrice}</TableCell> */}
           </TableRow>
         </TableBody> 
       </Table>

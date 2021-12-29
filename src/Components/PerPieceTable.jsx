@@ -57,12 +57,13 @@ export default function PerPieceTable({ product }) {
                 className={classes.square}
               ></Avatar>
             </TableCell>
-            <TableCell align="center">{product.title}</TableCell>
+            <TableCell align="center">{product.name}</TableCell>
             {/* <TableCell align="center">{product.stock}</TableCell> */}
             <TableCell align="center">{product.price}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
+
     </TableContainer>
   );
 }

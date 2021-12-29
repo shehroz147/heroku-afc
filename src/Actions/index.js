@@ -8,7 +8,7 @@ export const signIn = (user, token) => (dispatch) => {
     type: "SIGN_IN",
     payload: user,
   });
-  window.localStorage.setItem("hamzaFlawsToken", token);
+  window.localStorage.setItem("afcToken", token);
 
   // setTimeout(()=>{
   // document.localStorage.removeItem("hamzaFlawsToken");
@@ -20,19 +20,18 @@ export const signOut = () => (dispatch) => {
   dispatch({
     type: "SIGN_OUT",
   });
-  window.localStorage.removeItem("hamzaFlawsToken");
+  window.localStorage.removeItem("afcToken");
   history.push("/");
 };
 
 export const loggedInUser = () => async (dispatch) => {
   try {
-    const token = window.localStorage.getItem("hamzaFlawsToken");
+    const token = window.localStorage.getItem("afcToken");
     const { data } = await server.get(`/loggedInUser`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-
     dispatch({
       type: "SIGN_IN",
       payload: data,
@@ -42,22 +41,19 @@ export const loggedInUser = () => async (dispatch) => {
   }
 };
 
-export const createProduct = (data, setLoading) => async (
-  dispatch,
-  getState
-) => {
+export const createProduct = (data, setLoading) => async (dispatch,getState) => {
   try {
     setLoading(true);
-    const token = window.localStorage.getItem("hamzaFlawsToken");
-
+    const token = window.localStorage.getItem("afcToken");
     const response = await server.post("/admin/addProduct", data, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
       },
     });
+    console.log(response);
 
-    dispatch({ type: "CREATE_PRODUCT", payload: response.data.product });
+    dispatch({ type: "CREATE_PRODUCT", payload: response.data.result });
 
     setLoading(false);
     history.push("/productList");
@@ -69,8 +65,7 @@ export const createProduct = (data, setLoading) => async (
 
 export const fetchProducts = () => async (dispatch, getState) => {
   try {
-    const { data } = await server.get(`/shop/getProducts/`);
-
+    const { data } = await server.get(`admin/shop/getProducts`);
     dispatch({ type: "FETCH_PRODUCTS", payload: data });
   } catch (e) {
     console.log(e.message);
@@ -80,7 +75,7 @@ export const fetchProducts = () => async (dispatch, getState) => {
 export const editProduct = (id, data, setLoading) => async (dispatch) => {
   try {
     setLoading(true);
-    const token = window.localStorage.getItem("hamzaFlawsToken");
+    const token = window.localStorage.getItem("afcToken");
     const response = await server.patch(`/admin/editProduct/${id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -99,7 +94,7 @@ export const editProduct = (id, data, setLoading) => async (dispatch) => {
 
 export const deleteProduct = (id, setLoading) => async (dispatch) => {
   try {
-    const token = window.localStorage.getItem("hamzaFlawsToken");
+    const token = window.localStorage.getItem("afcToken");
 
     await server.delete(`/admin/deleteProduct/${id}`, {
       headers: {
