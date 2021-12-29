@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { editProduct } from "../../Actions";
 import { FileResize } from "../../utils/ImageCompressor";
-import { auth } from "../../firebase/firebase";
+// import { auth } from "../../firebase/firebase";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";

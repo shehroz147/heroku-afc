@@ -4,7 +4,7 @@ import {storage,auth } from '../../firebase/firebase';
 import { useDispatch, useSelector } from "react-redux";
 import Avatar from "@material-ui/core/Avatar";
 // import CancelIcon from "@material-ui/icons/Cancel";
-import { FileResize } from "../../utils/ImageCompressor";
+// import { FileResize } from "../../utils/ImageCompressor";
 import { createProduct } from "../../Actions";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
