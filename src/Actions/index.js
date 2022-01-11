@@ -41,19 +41,15 @@ export const loggedInUser = () => async (dispatch) => {
   }
 };
 
-export const createProduct = (data, setLoading) => async (dispatch,getState) => {
+export const createProduct = (data,url, setLoading) => async (dispatch) => {
   try {
     setLoading(true);
+    const send = data
+    send.imageUrl = url
     const token = window.localStorage.getItem("afcToken");
-    const response = await server.post("/admin/addProduct", data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    console.log(response);
-
-    dispatch({ type: "CREATE_PRODUCT", payload: response.data.result });
+      await server.post("/admin/addProduct",send);
+    // console.log(response);
+    dispatch({ type: "CREATE_PRODUCT", payload: data });
 
     setLoading(false);
     history.push("/productList");

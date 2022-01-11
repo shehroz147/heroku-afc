@@ -46,6 +46,9 @@ export default function PerPieceTable({ product }) {
             <TableCell align="center">
               <Typography variant="button">Product Price</Typography>
             </TableCell>
+            <TableCell align="center">
+              <Typography variant="button">Product Category</Typography>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -60,6 +63,7 @@ export default function PerPieceTable({ product }) {
             <TableCell align="center">{product.name}</TableCell>
             {/* <TableCell align="center">{product.stock}</TableCell> */}
             <TableCell align="center">{product.price}</TableCell>
+            <TableCell align="center">{product.category}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

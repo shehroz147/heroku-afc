@@ -11,15 +11,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Pagination from "../Components/Pagination";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import {createProduct} from "../Actions";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-// import { baseUrl } from "../apis/server";
-// import Avatar from "@material-ui/core/Avatar";
-import TableCell from "@material-ui/core/TableCell";
-// import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+
 
 
 import _ from "lodash";

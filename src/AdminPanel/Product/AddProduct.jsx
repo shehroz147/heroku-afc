@@ -109,9 +109,9 @@ export default function AddProduct() {
 
   let validationSchema = yup.object({
     title: yup.string().required("Product name is required"), //maximum number of letters .max(54,"name cannot be more then 54 charcters long")
-    price: yup.number().notRequired("price is required"),
+    price: yup.number().required("price is required"),
     category: yup.string().required("category is required"),
-    imageUrl:yup.string().required("imageUrl is required")
+  //  imageUrl:yup.string().required("imageUrl is required")
     // largePrice: yup.number().notRequired("largePrice is required"),
     // regularPrice: yup
     //   .number()
@@ -126,7 +126,7 @@ export default function AddProduct() {
         title: "",
         price: "",
         category: "",
-        imageUrl:"",
+        
         // largePrice: "",
         // regularPrice: "",
         // priceToBeAdded: "",
@@ -138,7 +138,7 @@ export default function AddProduct() {
         auth.signInAnonymously()
   .then(() => {
     // Signed in..
-    
+    // const data = values
     const uploadTask =   storage.ref(`/images/${selectedFiles.name}`).put(selectedFiles);
     uploadTask.on("state_changed", console.log, console.error, () => {
       storage
@@ -149,8 +149,8 @@ export default function AddProduct() {
           setFiles(null);
           setURL(url); 
           alert(url)
-          console.log(data);
-          const data = new FormData();
+          // console.log(data);
+          // const data = new FormData();
 
 
 
@@ -160,11 +160,19 @@ export default function AddProduct() {
           //     delete values[propName];
           //   }
           // }
-          data.append("obj", JSON.stringify({...values,image:url}));
+          // values.append("obj", JSON.stringify({...values,image:url}));
           // const img =  FileResize(selectedFiles);
           // data.append("image", img);
-  
-          dispatch(createProduct(data, setLoading));
+          console.log("aur bhaui")
+
+          // values['imageUrl']=url,
+
+          // alert(JSON.stringify(values))
+            
+          // const val = values
+          // data['imageUrl'] = val
+
+          dispatch(createProduct(values,url, setLoading));
   
           // resetForm({
           //   values: "",
@@ -249,7 +257,7 @@ export default function AddProduct() {
                 </Box>
               </Box>
 
-              {/* <TextField
+              <TextField
                 id="outlined-required"
                 label="Price"
                 name="price"
@@ -262,7 +270,7 @@ export default function AddProduct() {
                 onBlur={handleBlur}
                 error={errors.price && touched.price ? true : false}
                 helperText={errors.price && touched.price ? errors.price : ""}
-              /> */}
+              />
               {/* {category === "FALOODA" ||
               category === "FRESH" ||
               category === "JUICES" ||
@@ -387,7 +395,7 @@ export default function AddProduct() {
 
               <Box mt={2} mb={1}>
                 <Button
-                  onPress={handleSubmit}
+                  onClick={handleSubmit}
                   variant="outlined"
                   color="primary"
                   style={{ borderRadius: "50px" }}

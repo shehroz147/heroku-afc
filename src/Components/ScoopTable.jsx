@@ -47,6 +47,10 @@ export default function ScoopTable({ product }) {
             <TableCell align="center">
               <Typography variant="button">Price</Typography>
             </TableCell>
+            <TableCell align="center">
+              <Typography variant="button">Product Category</Typography>
+            </TableCell>
+
             {/* <TableCell align="center">
               <Typography variant="button">Additional Scoop Price</Typography>
             </TableCell> */}
@@ -63,7 +67,7 @@ export default function ScoopTable({ product }) {
             </TableCell>
             <TableCell align="center">{product.title}</TableCell>
             <TableCell align="center">{product.price}</TableCell>
-            {/* <TableCell align="center">{product.priceToBeAdded}</TableCell> */}
+            <TableCell align="center">{product.category}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

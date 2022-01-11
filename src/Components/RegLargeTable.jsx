@@ -47,9 +47,9 @@ export default function RegLargeTable({ product }) {
             <TableCell align="center">
               <Typography variant="button">Product Price</Typography>
             </TableCell>
-            {/* <TableCell align="center">
-              <Typography variant="button">Large Product Price</Typography>
-            </TableCell> */}
+            <TableCell align="center">
+              <Typography variant="button">Product Category</Typography>
+            </TableCell>
           </TableRow>
         </TableHead>
 
@@ -64,7 +64,7 @@ export default function RegLargeTable({ product }) {
             </TableCell>
             <TableCell align="center">{product.title}</TableCell>
             <TableCell align="center">{product.price}</TableCell>
-            {/* <TableCell align="center">{product?.productId?.largePrice}</TableCell> */}
+            <TableCell align="center">{product.category}</TableCell>
           </TableRow>
         </TableBody> 
       </Table>
