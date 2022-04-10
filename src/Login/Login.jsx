@@ -19,7 +19,6 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { useDispatch } from "react-redux";
 import { signIn } from "../Actions";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "90vh",
@@ -83,7 +82,9 @@ export default function Login() {
       setLoading(true);
       try {
         const { data } = await server.post("admin/login", values);
-        dispatch(signIn(data.result._id, data.token));
+        console.log("The result is :",data);
+        dispatch(signIn(data._id, data.token));
+        // console.log({data});
         // console.log(data.user);
         // console.log(data.result._id);
         // console.log(data);
@@ -200,7 +201,7 @@ export default function Login() {
                 >
                   <Button
                     variant="contained"
-                    color="primary"
+                    color = "primary"
                     type="submit"
                     style={{ borderRadius: "50px" }}
                   >

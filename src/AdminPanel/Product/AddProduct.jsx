@@ -80,18 +80,18 @@ const useStyles = makeStyles((theme) => ({
 export default function AddProduct() {
   const user = useSelector((state) => state.auth);
   const categoryList = [
-    { id: 1, name: "Poultry" },
-    { id: 2, name: "Lamb" },
-    { id: 3, name: "Mutton" },
-    { id: 4, name: "Beef" },
-    { id: 5, name: "Offal" },
-    { id: 6, name: "Marrinated" },
+    { id: 1, name: "Health" },
+    { id: 2, name: "Fitness" },
+    { id: 3, name: "Better Life" },
+    { id: 4, name: "Be Strong" },
+    { id: 5, name: "Your Time" },
+    { id: 6, name: "Gym Beast" },
   ];
 
   useEffect(() => {
-    const token = window.localStorage.getItem("afcToken");
+    const token = window.localStorage.getItem("peraToken");
 
-    if (!token || !user.role === "admin") {
+    if (!token || !user.role === "Admin") {
       return history.push("/");
     }
   });
@@ -110,7 +110,9 @@ export default function AddProduct() {
   let validationSchema = yup.object({
     title: yup.string().required("Product name is required"), //maximum number of letters .max(54,"name cannot be more then 54 charcters long")
     price: yup.number().required("price is required"),
-    category: yup.string().required("category is required"),
+    tag: yup.string().required("Tag is required"),
+    description: yup.string(),
+    additionalInfo: yup.string(),
   //  imageUrl:yup.string().required("imageUrl is required")
     // largePrice: yup.number().notRequired("largePrice is required"),
     // regularPrice: yup
@@ -125,7 +127,7 @@ export default function AddProduct() {
       initialValues: {
         title: "",
         price: "",
-        category: "",
+        tag: "",
         
         // largePrice: "",
         // regularPrice: "",
@@ -163,7 +165,7 @@ export default function AddProduct() {
           // values.append("obj", JSON.stringify({...values,image:url}));
           // const img =  FileResize(selectedFiles);
           // data.append("image", img);
-          console.log("aur bhaui")
+          // console.log("aur bhaui")
 
           // values['imageUrl']=url,
 
@@ -228,7 +230,7 @@ export default function AddProduct() {
                 <Box width="100%">
                   <FormControl variant="outlined">
                     <InputLabel id="demo-simple-select-outlined-label">
-                      Category
+                      Tag
                     </InputLabel>
 
                     <Select
@@ -237,7 +239,7 @@ export default function AddProduct() {
                         name: "category",
                         id: "age-simple",
                       }}
-                      value={values.category}
+                      value={values.tag}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       error={errors.category && touched.category ? true : false}
@@ -270,6 +272,34 @@ export default function AddProduct() {
                 onBlur={handleBlur}
                 error={errors.price && touched.price ? true : false}
                 helperText={errors.price && touched.price ? errors.price : ""}
+              />
+              <TextField
+                id="outlined-required"
+                label="Description"
+                name="description"
+                variant="outlined"
+                fullWidth
+                margin="dense"
+                type="text"
+                value={values.description}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                // error={errors.price && touched.price ? true : false}
+                // helperText={errors.price && touched.price ? errors.price : ""}
+              />
+              <TextField
+                id="outlined-required"
+                label="Additional Info"
+                name="additionalInfo"
+                variant="outlined"
+                fullWidth
+                margin="dense"
+                type="text"
+                value={values.additionalInfo}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                // error={errors.price && touched.price ? true : false}
+                // helperText={errors.price && touched.price ? errors.price : ""}
               />
               {/* {category === "FALOODA" ||
               category === "FRESH" ||

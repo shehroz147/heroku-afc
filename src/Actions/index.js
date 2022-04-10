@@ -8,7 +8,7 @@ export const signIn = (user, token) => (dispatch) => {
     type: "SIGN_IN",
     payload: user,
   });
-  window.localStorage.setItem("afcToken", token);
+  window.localStorage.setItem("peraToken", token);
 
   // setTimeout(()=>{
   // document.localStorage.removeItem("hamzaFlawsToken");
@@ -20,13 +20,13 @@ export const signOut = () => (dispatch) => {
   dispatch({
     type: "SIGN_OUT",
   });
-  window.localStorage.removeItem("afcToken");
+  window.localStorage.removeItem("peraToken");
   history.push("/");
 };
 
 export const loggedInUser = () => async (dispatch) => {
   try {
-    const token = window.localStorage.getItem("afcToken");
+    const token = window.localStorage.getItem("peraToken");
     const { data } = await server.get(`/loggedInUser`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,7 +46,7 @@ export const createProduct = (data,url, setLoading) => async (dispatch) => {
     setLoading(true);
     const send = data
     send.imageUrl = url
-    const token = window.localStorage.getItem("afcToken");
+    const token = window.localStorage.getItem("peraToken");
       await server.post("/admin/addProduct",send);
     // console.log(response);
     dispatch({ type: "CREATE_PRODUCT", payload: data });
@@ -71,7 +71,7 @@ export const fetchProducts = () => async (dispatch, getState) => {
 export const editProduct = (id, data, setLoading) => async (dispatch) => {
   try {
     setLoading(true);
-    const token = window.localStorage.getItem("afcToken");
+    const token = window.localStorage.getItem("peraToken");
     const response = await server.patch(`/admin/editProduct/${id}`, data, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -90,7 +90,7 @@ export const editProduct = (id, data, setLoading) => async (dispatch) => {
 
 export const deleteProduct = (id, setLoading) => async (dispatch) => {
   try {
-    const token = window.localStorage.getItem("afcToken");
+    const token = window.localStorage.getItem("peraToken");
 
     await server.delete(`/admin/deleteProduct/${id}`, {
       headers: {

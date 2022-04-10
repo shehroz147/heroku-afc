@@ -8,7 +8,7 @@ export const placeOrder = (
   setLoading
 ) => async (dispatch) => {
   try {
-    const token = window.localStorage.getItem("afcToken");
+    const token = window.localStorage.getItem("peraToken");
     setActiveStep(activeStep + 1);
     await server.post(
       `/checkout`,

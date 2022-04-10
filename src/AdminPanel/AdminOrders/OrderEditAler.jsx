@@ -82,7 +82,7 @@ export default function AddCategory({
     setLoading(true);
     const orderList = orders.filter((o) => o._id !== order._id);
 
-    const token = window.localStorage.getItem("hamzaFlawsToken");
+    const token = window.localStorage.getItem("peraToken");
     try {
       await server.post(
         `/admin/orderStatus/${order._id}`,

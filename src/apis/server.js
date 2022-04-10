@@ -1,9 +1,6 @@
 import axios from "axios";
 
-// const { REACT_APP_SERVER_BASE_URL } = process.env;
-// export const baseUrl = "https://afchalal.herokuapp.com/";
-// export const baseUrl = "https://afcbackend.herokuapp.com";
-export const baseUrl = "http://localhost:5000";
+export const baseUrl = "https://pera-backend.herokuapp.com";
 
 export default axios.create({
   baseURL: baseUrl,

@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useRef} from "react";
 
 import ProductDetails from "../../Components/ProductDetailes";
 
@@ -10,15 +10,21 @@ import Typography from "@material-ui/core/Typography";
 import TableCell from "@material-ui/core/TableCell";
 
 import TableRow from "@material-ui/core/TableRow";
+import ReactToPrint from "react-to-print";
+
+
+
+
 
 export default function OrderDetailes({ order }) {
   // alert(JSON.stringify(order))
+  let componentRef = useRef();
   return (
     <Container maxWidth="lg">
       {order ? (
         <>
           <Typography variant="h5" gutterBottom key="7656" align="center">
-            Order Detailes
+            Order Details
           </Typography>
 
           <Grid container>
@@ -34,12 +40,12 @@ export default function OrderDetailes({ order }) {
                 </Typography>
                 <Box>
                   <Typography variant="body1" align="center">
-                    Name: {order.userId.firstName} {order.userId.lastName}
+                  {order.userId} 
                   </Typography>
                 </Box>
                 <Box>
                   <Typography variant="body1" align="center">
-                    Cantact: {order.userId.contactDetails}
+                    Contact: {order.userId}
                   </Typography>
                 </Box>
 
@@ -62,12 +68,12 @@ export default function OrderDetailes({ order }) {
                 </Typography>
                 <Box>
                   <Typography variant="body1" align="center" gutterBottom>
-                    Address: {order.userId.shippingAddress}
+                    Address: {order.userId}
                   </Typography>
                 </Box>
                 <Box>
                   <Typography variant="body1" align="center">
-                    City: {order.userId.city}
+                    City: {order.userId}
                   </Typography>
                 </Box>
               </Box>
@@ -75,11 +81,11 @@ export default function OrderDetailes({ order }) {
           </Grid>
           <Box mt={2}></Box>
 
-          {order
+          {/* {order
             ? order.products.map((product) => {
                 return <ProductDetails product={product} />;
               })
-            : ""}
+            : ""} */}
 
           <TableRow>
             <TableCell>
@@ -92,7 +98,7 @@ export default function OrderDetailes({ order }) {
               <Typography variant="button"></Typography>
             </TableCell>
             <TableCell align="center">
-              <Typography variant="button"> {order.total} Rs</Typography>
+              <Typography variant="button"> {order.amount} Rs</Typography>
             </TableCell>
           </TableRow>
         </>

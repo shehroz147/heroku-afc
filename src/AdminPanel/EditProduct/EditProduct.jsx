@@ -74,12 +74,12 @@ export default function EditProduct(props) {
     imageUrl: "",
   });
   const categoryList = [
-    { id: 1, name: "Poultry" },
-    { id: 2, name: "Lamb" },
-    { id: 3, name: "Mutton" },
-    { id: 4, name: "Beef" },
-    { id: 5, name: "Offal" },
-    { id: 6, name: "Marinated" },
+    { id: 1, name: "Health" },
+    { id: 2, name: "Fitness" },
+    { id: 3, name: "Better Life" },
+    { id: 4, name: "Be Strong" },
+    { id: 5, name: "Your Time" },
+    { id: 6, name: "Gym Beast" },
     // { id: 7, name: "FALOODA" },
     // { id: 8, name: "SHAKES" },
     // { id: 9, name: "HAMZA SPECIAL JUICE" },
@@ -96,7 +96,7 @@ export default function EditProduct(props) {
   const classes = useStyles();
 
   useEffect(() => {
-    const token = window.localStorage.getItem("afcToken");
+    const token = window.localStorage.getItem("peraToken");
 
     if (!token || !user.role === "admin") {
       return history.push("/");

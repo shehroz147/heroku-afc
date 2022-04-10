@@ -45,12 +45,12 @@ export default function AdminOrders() {
   // const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const token = window.localStorage.getItem("hamzaFlawsToken");
+    const token = window.localStorage.getItem("peraToken");
     if (!token) {
       return history.push("/auth/Login");
     }
     server
-      .get("/admin/allOrders", {
+      .get("/admin/getOrders", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

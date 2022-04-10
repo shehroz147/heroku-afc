@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import OrderDetails from "./OrderDetailes";
 import OrderEditAler from "./OrderEditAler";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,7 +21,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import ReactToPrint from "react-to-print";
+import Button from "react";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -54,10 +55,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ControlledAccordions() {
+  let componentRef = useRef();
+
   const classes = useStyles();
   const user = useSelector((state) => state.auth);
   const [expanded, setExpanded] = useState(false);
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState('');
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = React.useState(false);
   const [order, setOrder] = useState(null);
@@ -66,23 +69,31 @@ export default function ControlledAccordions() {
   };
 
   useEffect(() => {
-    const token = window.localStorage.getItem("hamzaFlawsToken");
-    if (!token || user.user.role !== "admin") {
-      return history.push("/auth/Login");
+    const token = window.localStorage.getItem("peraToken");
+    // if (!token || user.user.role !== "admin") {
+    //   return history.push("/auth/Login");
+    // }
+    const getOrder = async()=>{
+  let details = await server.get("/admin/getOrders");
+        // headers: {
+        //   "Content-Type": "application/json",
+        //   Authorization: `Bearer ${token}`,
+        // },
+    
+      
+        // setLoading(true);
+        // console.log(details.data.result);
+        setOrders(details.data);
+        return details.data;
     }
-    server
-      .get("/admin/allOrders", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setLoading(false);
-        setOrders([...res.data.data]);
-      })
-      .catch((e) => console.log(e.message));
-  }, [user.user.role]);
+  getOrder();
+    setLoading(false);
+// setLoading(false);
+// console.log(data);
+// setOrders(data);
+console.log("Orders",orders);
+console.log("orderId",orders);
+  },[]);
 
   const onOrderStatusChangeSelect = (order) => {
     setOrder(order);
@@ -92,7 +103,7 @@ export default function ControlledAccordions() {
     setLoading(true);
     const orderList = orders.filter((o) => o._id !== id);
 
-    const token = window.localStorage.getItem("hamzaFlawsToken");
+    const token = window.localStorage.getItem("peraToken");
     try {
       await server.delete(
         `/admin/order/${id}`,
@@ -127,13 +138,12 @@ export default function ControlledAccordions() {
           <Grid container direction="row" justify="center" alignItems="center">
             You have not recieved any order yet
           </Grid>
+          
         ) : (
-          // </Box>
-          orders.map((order) => {
-            return (
+         
               <Accordion
-                expanded={expanded === order._id}
-                onChange={handleChange(order._id)}
+                expanded={expanded === orders._id}
+                onChange={handleChange(orders._id)}
               >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
@@ -141,11 +151,11 @@ export default function ControlledAccordions() {
                   id="panel1bh-header"
                 >
                   <Typography className={classes.heading}>
-                    {toTitleCase(order.status)}
+                    {orders.status}
                   </Typography>
 
-                  <Typography className={classes.heading}>
-                    {toTitleCase(moment(order.createdAt).format('MMMM Do YYYY, h:mm:ss a'))}
+                  <Typography className={classes.heading} style={{color:'green'}}>
+                    {moment(orders.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
                   </Typography>
                   <Typography className={classes.secondaryHeading}>
                     {/* <Button
@@ -159,30 +169,43 @@ export default function ControlledAccordions() {
                       Change Order Status
                     </Button> */}
                     <IconButton
+                    style={{color:'green',marginLeft:280}}
                       variant="outlined"
-                      onClick={() => onOrderStatusChangeSelect(order)}
+                      onClick={() => onOrderStatusChangeSelect(orders)}
                     >
                       <EditIcon />
                     </IconButton>
                     <IconButton
+                    style={{color:'red'}}
                       variant="outlined"
-                      onClick={() => onOrderDelet(order._id)}
+                      onClick={() => onOrderDelet(orders._id)}
                     >
                       <DeleteIcon />
                     </IconButton>
                   </Typography>
+                  <div>
+        {/* button to trigger printing of target component */}
+        <ReactToPrint
+          trigger={() => <Button>Print this out!</Button>}
+          content={() => componentRef}
+        />
+
+        {/* component to be printed */}
+        <ControlledAccordions ref={(el) => (componentRef = el)} />
+      </div>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <OrderDetails order={order} />
+                  <OrderDetails order={orders} />
                 </AccordionDetails>
               </Accordion>
-            );
-          })
+            
+            
+          
         )}
         <OrderEditAler
           open={open}
           setOpen={setOpen}
-          order={order}
+          order={orders}
           setOrder={setOrder}
           setLoading={setLoading}
           orders={orders} //array of all orders needed to be updated when status changes
@@ -190,6 +213,6 @@ export default function ControlledAccordions() {
           // onOrderStatusChangeSelect={onOrderStatusChangeSelect}
         />
       </Container>
-    </div>
+      </div>
   );
 }

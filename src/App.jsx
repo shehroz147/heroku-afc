@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loggedInUser, fetchProducts } from "./Actions";
 import theme from "./Theme";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -18,10 +18,11 @@ import Nav from "./Navbar/Nav";
 
 export default function App() {
   const dispatch = useDispatch();
-
+  // const productData = useSelector((state) => state.posts);
   useEffect(() => {
     dispatch(fetchProducts());
-    const token = window.localStorage.getItem("afcToken");
+    // console.log("The products are:",productData);
+    const token = window.localStorage.getItem("peraToken");
     if (token) {
       dispatch(loggedInUser());
     }
