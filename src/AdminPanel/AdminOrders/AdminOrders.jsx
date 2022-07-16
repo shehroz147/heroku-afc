@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import OrderDetails from "./OrderDetailes";
 import OrderEditAler from "./OrderEditAler";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,134 +21,144 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import ReactToPrint from "react-to-print";
+import Button from "react";
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-    minHeight: "70vh",
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(20),
-    flexBasis: "33.33%",
-    color: "#F64657",
-    flexShrink: 0,
-    fontWeight: "bold",
-  },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
-  },
-  CircularProgress: {
-    position: "absolute",
-    top: "55%",
-    right: "50%",
-    left: "50%",
-  },
-  orderDetaileBox: {
-    display: "flex",
-  },
-  orderInformation: {
-    display: "flex",
-    marginRight: "10px",
-  },
+    root: {
+        width: "100%",
+        minHeight: "70vh",
+    },
+    heading: {
+        fontSize: theme.typography.pxToRem(20),
+        flexBasis: "33.33%",
+        color: "#F64657",
+        flexShrink: 0,
+        fontWeight: "bold",
+    },
+    secondaryHeading: {
+        fontSize: theme.typography.pxToRem(15),
+        color: theme.palette.text.secondary,
+    },
+    CircularProgress: {
+        position: "absolute",
+        top: "55%",
+        right: "50%",
+        left: "50%",
+    },
+    orderDetaileBox: {
+        display: "flex",
+    },
+    orderInformation: {
+        display: "flex",
+        marginRight: "10px",
+    },
 }));
 
 export default function ControlledAccordions() {
-  const classes = useStyles();
-  const user = useSelector((state) => state.auth);
-  const [expanded, setExpanded] = useState(false);
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [open, setOpen] = React.useState(false);
-  const [order, setOrder] = useState(null);
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+    let componentRef = useRef();
 
-  useEffect(() => {
-    const token = window.localStorage.getItem("hamzaFlawsToken");
-    if (!token || user.user.role !== "admin") {
-      return history.push("/auth/Login");
-    }
-    server
-      .get("/admin/allOrders", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setLoading(false);
-        setOrders([...res.data.data]);
-      })
-      .catch((e) => console.log(e.message));
-  }, [user.user.role]);
+    const classes = useStyles();
+    const user = useSelector((state) => state.auth);
+    const [expanded, setExpanded] = useState(false);
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [open, setOpen] = React.useState(false);
+    const [order, setOrder] = useState([]);
+    const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+    };
 
-  const onOrderStatusChangeSelect = (order) => {
-    setOrder(order);
-    setOpen(true);
-  };
-  const onOrderDelet = async (id) => {
-    setLoading(true);
-    const orderList = orders.filter((o) => o._id !== id);
+    useEffect(() => {
+        const token = window.localStorage.getItem("kareydarToken");
+        // if (!token || user.user.role !== "admin") {
+        //   return history.push("/auth/Login");
+        // }
+        const getOrder = async () => {
+            const details = await server.get("/admin/getOrders");
+            // headers: {
+            //   "Content-Type": "application/json",
+            //   Authorization: `Bearer ${token}`,
+            // },
 
-    const token = window.localStorage.getItem("hamzaFlawsToken");
-    try {
-      await server.delete(
-        `/admin/order/${id}`,
 
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+            // setLoading(true);
+            console.log(details.data);
+            setOrder(details.data);
+            return details.data;
         }
-      );
-      setOrders([...orderList]);
+        getOrder();
+        setLoading(false);
+        // setLoading(false);
+        // console.log(data);
+        // setOrders(data);
+        console.log("Orders", order);
+        console.log("orderId", order);
+    }, []);
 
-      setLoading(false);
-    } catch (e) {
-      setLoading(false);
-      console.log(e);
-      alert("order status is not deleted");
-    }
-  };
-  return (
-    <div className={classes.root}>
-      <Container maxWidth="lg">
-        {loading ? (
-          <Box height="100vh">
-            <Box className={classes.CircularProgress}>
-              <CircularProgress />
-            </Box>
-          </Box>
-        ) : orders.length === 0 ? (
-          // <Box height="40vh" width="200%" pt={8}>
-          <Grid container direction="row" justify="center" alignItems="center">
-            You have not recieved any order yet
-          </Grid>
-        ) : (
-          // </Box>
-          orders.map((order) => {
-            return (
-              <Accordion
-                expanded={expanded === order._id}
-                onChange={handleChange(order._id)}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
-                >
-                  <Typography className={classes.heading}>
-                    {toTitleCase(order.status)}
-                  </Typography>
+    const onOrderStatusChangeSelect = (order) => {
+        setOrder(order);
+        setOpen(true);
+    };
+    const onOrderDelet = async (id) => {
+        setLoading(true);
+        const orderList = order.filter((o) => o._id !== id);
 
-                  <Typography className={classes.heading}>
-                    {toTitleCase(moment(order.createdAt).format('MMMM Do YYYY, h:mm:ss a'))}
-                  </Typography>
-                  <Typography className={classes.secondaryHeading}>
-                    {/* <Button
+        const token = window.localStorage.getItem("kareydarToken");
+        try {
+            await server.delete(
+                `/admin/order/${id}`,
+
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            setOrders([...orderList]);
+
+            setLoading(false);
+        } catch (e) {
+            setLoading(false);
+            console.log(e);
+            alert("order status is not deleted");
+        }
+    };
+    return (
+        <div className={classes.root}>
+            <Container maxWidth="lg">
+                {loading ? (
+                    <Box height="100vh">
+                        <Box className={classes.CircularProgress}>
+                            <CircularProgress />
+                        </Box>
+                    </Box>
+                ) : order.length === 0 ? (
+                    // <Box height="40vh" width="200%" pt={8}>
+                    <Grid container direction="row" justify="center" alignItems="center">
+                        You have not recieved any order yet
+                    </Grid>
+
+                ) : (
+
+                    <Accordion
+                        expanded={expanded === order._id}
+                        onChange={handleChange(order._id)}
+                    >
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1bh-content"
+                            id="panel1bh-header"
+                        >
+                            <Typography className={classes.heading}>
+                                {order.status}
+                            </Typography>
+
+                            <Typography className={classes.heading} style={{ color: 'green' }}>
+                                {moment(order.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+                            </Typography>
+                            <Typography className={classes.secondaryHeading}>
+                                {/* <Button
                       variant="outlined"
                       type="button"
                       onClick={(e) =>
@@ -158,38 +168,51 @@ export default function ControlledAccordions() {
                       {" "}
                       Change Order Status
                     </Button> */}
-                    <IconButton
-                      variant="outlined"
-                      onClick={() => onOrderStatusChangeSelect(order)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      variant="outlined"
-                      onClick={() => onOrderDelet(order._id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <OrderDetails order={order} />
-                </AccordionDetails>
-              </Accordion>
-            );
-          })
-        )}
-        <OrderEditAler
-          open={open}
-          setOpen={setOpen}
-          order={order}
-          setOrder={setOrder}
-          setLoading={setLoading}
-          orders={orders} //array of all orders needed to be updated when status changes
-          setOrders={setOrders}
-          // onOrderStatusChangeSelect={onOrderStatusChangeSelect}
-        />
-      </Container>
-    </div>
-  );
+                                <IconButton
+                                    style={{ color: 'green', marginLeft: 280 }}
+                                    variant="outlined"
+                                    onClick={() => onOrderStatusChangeSelect(order)}
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                    style={{ color: 'red' }}
+                                    variant="outlined"
+                                    onClick={() => onOrderDelet(order._id)}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Typography>
+                            <div>
+                                {/* button to trigger printing of target component */}
+                                <ReactToPrint
+                                    trigger={() => <Button>Print this out!</Button>}
+                                    content={() => componentRef}
+                                />
+
+                                {/* component to be printed */}
+                                <ControlledAccordions ref={(el) => (componentRef = el)} />
+                            </div>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <OrderDetails order={order} />
+                        </AccordionDetails>
+                    </Accordion>
+
+
+
+                )}
+                <OrderEditAler
+                    open={open}
+                    setOpen={setOpen}
+                    order={order}
+                    setOrder={setOrder}
+                    setLoading={setLoading}
+                    orders={order} //array of all orders needed to be updated when status changes
+                    setOrders={setOrders}
+                // onOrderStatusChangeSelect={onOrderStatusChangeSelect}
+                />
+            </Container>
+        </div>
+    );
 }

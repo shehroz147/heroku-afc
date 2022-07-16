@@ -24,226 +24,226 @@ import server, { baseUrl } from "../../apis/server";
 import history from "../../history";
 const drawerWidth = 340;
 const useStyles = makeStyles((theme) => ({
-  CircularProgress: {
-    position: "absolute",
-    top: "55%",
-    right: "50%",
-    left: "50%",
-  },
-  drawerPaper: {
-    width: drawerWidth,
-  },
-  drawerHeader: {
-    display: "flex",
-    alignItems: "center",
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-    justifyContent: "flex-start",
-  },
-  adminUploadButton: { position: "absolute", bottom: "10px", right: "20px" },
-  addProductForm: {
-    minHeight: "80vh",
-    margin: "0 auto",
-  },
-  input: {
-    display: "none",
-  },
-  show: {
-    display: "flex",
-  },
-  imageUploadMainContainer: {
-    position: "relative",
-  },
-  centerUploadButton: {
-    position: "absolute",
-    top: "40%",
-    left: "45%",
-  },
+    CircularProgress: {
+        position: "absolute",
+        top: "55%",
+        right: "50%",
+        left: "50%",
+    },
+    drawerPaper: {
+        width: drawerWidth,
+    },
+    drawerHeader: {
+        display: "flex",
+        alignItems: "center",
+        padding: theme.spacing(0, 1),
+        // necessary for content to be below app bar
+        ...theme.mixins.toolbar,
+        justifyContent: "flex-start",
+    },
+    adminUploadButton: { position: "absolute", bottom: "10px", right: "20px" },
+    addProductForm: {
+        minHeight: "80vh",
+        margin: "0 auto",
+    },
+    input: {
+        display: "none",
+    },
+    show: {
+        display: "flex",
+    },
+    imageUploadMainContainer: {
+        position: "relative",
+    },
+    centerUploadButton: {
+        position: "absolute",
+        top: "40%",
+        left: "45%",
+    },
 }));
 export default function EditProduct(props) {
-  const user = useSelector((state) => state.auth);
+    const user = useSelector((state) => state.auth);
 
-  const [product, setProduct] = useState({
-    title: "",
-    price: "",
-    category: "",
-    // largePrice: "",
-    // regularPrice: "",
-    // priceToBeAdded: "",
-    imageUrl: "",
-  });
-  const categoryList = [
-    { id: 1, name: "Poultry" },
-    { id: 2, name: "Lamb" },
-    { id: 3, name: "Mutton" },
-    { id: 4, name: "Beef" },
-    { id: 5, name: "Offal" },
-    { id: 6, name: "Marinated" },
-    // { id: 7, name: "FALOODA" },
-    // { id: 8, name: "SHAKES" },
-    // { id: 9, name: "HAMZA SPECIAL JUICE" },
-    // { id: 10, name: "FRESH JUICES" },
-    // { id: 11, name: "SOUP" },
-    // { id: 12, name: "CHAAT" },
-  ];
+    const [product, setProduct] = useState({
+        title: "",
+        price: "",
+        category: "",
+        // largePrice: "",
+        // regularPrice: "",
+        // priceToBeAdded: "",
+        imageUrl: "",
+    });
+    const categoryList = [
+        { id: 1, name: "Poultry" },
+        { id: 2, name: "Lamb" },
+        { id: 3, name: "Mutton" },
+        { id: 4, name: "Beef" },
+        { id: 5, name: "Offal" },
+        { id: 6, name: "Marinated" },
+        // { id: 7, name: "FALOODA" },
+        // { id: 8, name: "SHAKES" },
+        // { id: 9, name: "HAMZA SPECIAL JUICE" },
+        // { id: 10, name: "FRESH JUICES" },
+        // { id: 11, name: "SOUP" },
+        // { id: 12, name: "CHAAT" },
+    ];
 
-  const [selectedFiles, setFiles] = useState(null);
-  const [loading, setLoading] = useState(false);
+    const [selectedFiles, setFiles] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-  // console.log(uploadedImages.length);
-  const dispatch = useDispatch();
-  const classes = useStyles();
+    // console.log(uploadedImages.length);
+    const dispatch = useDispatch();
+    const classes = useStyles();
 
-  useEffect(() => {
-    const token = window.localStorage.getItem("afcToken");
+    useEffect(() => {
+        const token = window.localStorage.getItem("kareydarToken");
 
-    if (!token || !user.role === "admin") {
-      return history.push("/");
-    }
-  });
-  useEffect(() => {
-    server
-      .get(`/admin/shop/getProduct/${props.match.params.id}`)
-      .then((res) => {
-        setProduct(res.data);
-      })
-      .catch((err) => console.log(err.message));
-  }, [props.match.params.id]);
+        if (!token || !user.role === "admin") {
+            return history.push("/");
+        }
+    });
+    useEffect(() => {
+        server
+            .get(`/admin/shop/getProduct/${props.match.params.id}`)
+            .then((res) => {
+                setProduct(res.data);
+            })
+            .catch((err) => console.log(err.message));
+    }, [props.match.params.id]);
 
-  const handleFile = (e) => {
-    setFiles(e.target.files[0]);
-  };
+    const handleFile = (e) => {
+        setFiles(e.target.files[0]);
+    };
 
-  let validationSchema = yup.object({
-    title: yup.string().required("Product name is required"), //maximum number of letters .max(54,"name cannot be more then 54 charcters long")
-    price: yup.number().notRequired("price is required"),
-    category: yup.string().required("category is required"),
-    // largePrice: yup.number().notRequired("largePrice is required"),
-    // regularPrice: yup
-    //   .number()
-    //   .notRequired(
-    //     "regularPrice is not only apply if you want to offer regularPrice"
-      // ),
-  //   priceToBeAdded: yup.number().notRequired("size is required"),
-  });
-  const {
-    values,
-    errors,
-    touched,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-  } = useFormik({
-    initialValues: {
-      title: product.title,
-      price: product.price ? product.price : "",
-      category: product.category,
-      // largePrice: product.largePrice ? product.largePrice : "",
-      // regularPrice: product.regularPrice ? product.regularPrice : "",
-      // priceToBeAdded: product.priceToBeAdded ? product.priceToBeAdded : "",
-    },
-    enableReinitialize: true,
-    validationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      setLoading(true);
-      const data = new FormData();
+    let validationSchema = yup.object({
+        title: yup.string().required("Product name is required"), //maximum number of letters .max(54,"name cannot be more then 54 charcters long")
+        price: yup.number().notRequired("price is required"),
+        category: yup.string().required("category is required"),
+        // largePrice: yup.number().notRequired("largePrice is required"),
+        // regularPrice: yup
+        //   .number()
+        //   .notRequired(
+        //     "regularPrice is not only apply if you want to offer regularPrice"
+        // ),
+        //   priceToBeAdded: yup.number().notRequired("size is required"),
+    });
+    const {
+        values,
+        errors,
+        touched,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+    } = useFormik({
+        initialValues: {
+            title: product.title,
+            price: product.price ? product.price : "",
+            category: product.category,
+            // largePrice: product.largePrice ? product.largePrice : "",
+            // regularPrice: product.regularPrice ? product.regularPrice : "",
+            // priceToBeAdded: product.priceToBeAdded ? product.priceToBeAdded : "",
+        },
+        enableReinitialize: true,
+        validationSchema,
+        onSubmit: async (values, { resetForm }) => {
+            setLoading(true);
+            const data = new FormData();
 
-      data.append("obj", JSON.stringify(values));
-      if (selectedFiles) {
-        const img = await FileResize(selectedFiles);
-        data.append("image", img);
-      }
-      dispatch(editProduct(product._id, data, setLoading));
+            data.append("obj", JSON.stringify(values));
+            if (selectedFiles) {
+                const img = await FileResize(selectedFiles);
+                data.append("image", img);
+            }
+            dispatch(editProduct(product._id, data, setLoading));
 
-      resetForm({
-        values: "",
-      });
-      setFiles(null);
-    },
-  });
+            resetForm({
+                values: "",
+            });
+            setFiles(null);
+        },
+    });
 
-  return (
-    <>
-      <Container maxWidth="lg">
-        {loading ? (
-          <Box height="100vh">
-            <Box className={classes.CircularProgress}>
-              <CircularProgress />
-            </Box>
-          </Box>
-        ) : (
-          <Box width="60%" className={classes.addProductForm}>
-            <form onSubmit={handleSubmit}>
-              <TextField
-                id="outlined-required"
-                label="Product Name"
-                name="title"
-                variant="outlined"
-                fullWidth
-                margin="dense"
-                type="text"
-                value={values.title}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={errors.title && touched.title ? true : false}
-                helperText={errors.title && touched.title ? errors.title : ""}
-              />
-              <Box mt={2} mb={1}>
-                <Box width ="60%">
-                  <FormControl variant="outlined">
-                    <InputLabel id="demo-simple-select-outlined-label">
-                      Category
-                    </InputLabel>
+    return (
+        <>
+            <Container maxWidth="lg">
+                {loading ? (
+                    <Box height="100vh">
+                        <Box className={classes.CircularProgress}>
+                            <CircularProgress />
+                        </Box>
+                    </Box>
+                ) : (
+                    <Box width="60%" className={classes.addProductForm}>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                id="outlined-required"
+                                label="Product Name"
+                                name="title"
+                                variant="outlined"
+                                fullWidth
+                                margin="dense"
+                                type="text"
+                                value={values.title}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                error={errors.title && touched.title ? true : false}
+                                helperText={errors.title && touched.title ? errors.title : ""}
+                            />
+                            <Box mt={2} mb={1}>
+                                <Box width="60%">
+                                    <FormControl variant="outlined">
+                                        <InputLabel id="demo-simple-select-outlined-label">
+                                            Category
+                                        </InputLabel>
 
-                    <Select
-                      id="demo-simple-select"
-                      inputProps={{
-                        name: "category",
-                        id: "age-simple",
-                      }}
-                      value={values.category}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={errors.category && touched.category ? true : false}
-                    >
-                      {categoryList.map((category) => (
-                        <MenuItem value={category.name}>
-                          {category.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    {errors.category && touched.category ? (
-                      <FormHelperText> {errors.category} </FormHelperText>
-                    ) : (
-                      ""
-                    )}
-                  </FormControl>
-                </Box>
-              </Box>
+                                        <Select
+                                            id="demo-simple-select"
+                                            inputProps={{
+                                                name: "category",
+                                                id: "age-simple",
+                                            }}
+                                            value={values.category}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            error={errors.category && touched.category ? true : false}
+                                        >
+                                            {categoryList.map((category) => (
+                                                <MenuItem value={category.name}>
+                                                    {category.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                        {errors.category && touched.category ? (
+                                            <FormHelperText> {errors.category} </FormHelperText>
+                                        ) : (
+                                            ""
+                                        )}
+                                    </FormControl>
+                                </Box>
+                            </Box>
 
-              <TextField
-                id="outlined-required"
-                label="Price"
-                name="price"
-                variant="outlined"
-                fullWidth
-                margin="dense"
-                type="number"
-                value={values.price}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={errors.price && touched.price ? true : false}
-                helperText={errors.price && touched.price ? errors.price : ""}
-              />
-              {/* {category === "FALOODA" ||
+                            <TextField
+                                id="outlined-required"
+                                label="Price"
+                                name="price"
+                                variant="outlined"
+                                fullWidth
+                                margin="dense"
+                                type="number"
+                                value={values.price}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                error={errors.price && touched.price ? true : false}
+                                helperText={errors.price && touched.price ? errors.price : ""}
+                            />
+                            {/* {category === "FALOODA" ||
               category === "FRESH" ||
               category === "JUICES" ||
               category === "SHAKES" ||
               category === "HAMZA SPECIAL JUICE" ||
               category === "CHAAT" ||
               category === "SOUP" ? ( */}
-              {/* <Box className={classes.show}>
+                            {/* <Box className={classes.show}>
                 <Box width="50%">
                   <TextField
                     variant="outlined"
@@ -284,7 +284,7 @@ export default function EditProduct(props) {
               {/* ) : (
                 ""
               )} */}
-              {/* <TextField
+                            {/* <TextField
                 id="standard-multiline-static"
                 label="Scoop Price To be added"
                 name="priceToBeAdded"
@@ -306,79 +306,79 @@ export default function EditProduct(props) {
                 }
               />  */}
 
-              <Box mt={2}>
-                <input
-                  accept="image/*"
-                  className={classes.input}
-                  id="contained-button-file"
-                  // multiple
-                  type="file"
-                  name="image"
-                  onChange={(e) => handleFile(e)}
-                />
-                <label htmlFor="contained-button-file">
-                  <Button
-                    variant="contained"
-                    color="default"
-                    component="span"
-                    startIcon={<CloudUploadIcon />}
-                  >
-                    Upload
-                  </Button>
-                </label>
-              </Box>
+                            <Box mt={2}>
+                                <input
+                                    accept="image/*"
+                                    className={classes.input}
+                                    id="contained-button-file"
+                                    // multiple
+                                    type="file"
+                                    name="image"
+                                    onChange={(e) => handleFile(e)}
+                                />
+                                <label htmlFor="contained-button-file">
+                                    <Button
+                                        variant="contained"
+                                        color="default"
+                                        component="span"
+                                        startIcon={<CloudUploadIcon />}
+                                    >
+                                        Upload
+                                    </Button>
+                                </label>
+                            </Box>
 
-              <Box mt={2}>
-                {/* {selectedFiles.length !== 0 */}
-                {selectedFiles ? (
-                  // selectedFiles.map((file, index) => (
-                  <>
-                    <div className={classes.box}>
-                      <Avatar
-                        variant="square"
-                        alt="main_Image"
-                        src={URL.createObjectURL(selectedFiles)}
-                        className={classes.large}
-                      />
+                            <Box mt={2}>
+                                {/* {selectedFiles.length !== 0 */}
+                                {selectedFiles ? (
+                                    // selectedFiles.map((file, index) => (
+                                    <>
+                                        <div className={classes.box}>
+                                            <Avatar
+                                                variant="square"
+                                                alt="main_Image"
+                                                src={URL.createObjectURL(selectedFiles)}
+                                                className={classes.large}
+                                            />
 
-                      {/* <CancelIcon
+                                            {/* <CancelIcon
                         className={classes.icon}
                         onClick={() => handleDelete()}
                       /> */}
-                    </div>
-                  </>
-                ) : (
-                  // ))
-                  <div className={classes.box}>
-                    <Avatar
-                      variant="square"
-                      alt="main_Image"
-                      src={baseUrl + "/" + product.imageUrl}
-                      className={classes.large}
-                    />
+                                        </div>
+                                    </>
+                                ) : (
+                                    // ))
+                                    <div className={classes.box}>
+                                        <Avatar
+                                            variant="square"
+                                            alt="main_Image"
+                                            src={baseUrl + "/" + product.imageUrl}
+                                            className={classes.large}
+                                        />
 
-                    {/* <CancelIcon
+                                        {/* <CancelIcon
                         className={classes.icon}
                         onClick={() => handleDelete()}
                       /> */}
-                  </div>
+                                    </div>
+                                )}
+                            </Box>
+
+                            <Box mt={2} mb={1}>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    style={{ borderRadius: "50px" }}
+                                    type="submit"
+                                >
+                                    Update product
+                                </Button>
+                            </Box>
+                        </form>
+                    </Box>
                 )}
-              </Box>
-
-              <Box mt={2} mb={1}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  style={{ borderRadius: "50px" }}
-                  type="submit"
-                >
-                  Update product
-                </Button>
-              </Box>
-            </form>
-          </Box>
-        )}
-      </Container>
-    </>
-  );
+            </Container>
+        </>
+    );
 }

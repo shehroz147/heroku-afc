@@ -5,8 +5,5 @@ import CategoriesReducer from "./CategorieseReducer";
 import homeProductsReducer from "./HomeProductsReducer";
 
 export default combineReducers({
-  auth: authReducer,
-  posts: postReducer,
-  categories: CategoriesReducer,
-  homeProducts: homeProductsReducer,
+    auth: authReducer,
 });

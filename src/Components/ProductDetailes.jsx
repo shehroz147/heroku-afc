@@ -2,12 +2,14 @@ import React from "react";
 // import PerPieceTable from "./PerPieceTable";
 import RegLargeTable from "./RegLargeTable";
 import ScoopTable from "./ScoopTable";
-export default function ProductDetailes({ product }) {
-  return product.category === "Ice Cream -Scoop" ? (
-    <ScoopTable product={product} />
-  ) : (
-    <RegLargeTable product={product} />
-  );
+export default function ProductDetails({ product }) {
+    return (
+        //   return product.category === "Ice Cream -Scoop" ? (
+        <ScoopTable product={product} />
+        //   ) : (
+        // <RegLargeTable product={product} />
+        //   );
+    )
 }
 //   return product.category === "FALOODA" ||
 //     product.category === "FRESH JUICES" ||
