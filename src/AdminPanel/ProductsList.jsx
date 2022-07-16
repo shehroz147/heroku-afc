@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from "react";
+=======
+import React, { useState, useEffect,useRef } from "react";
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 import { deleteProduct } from "../Actions";
 import history from "../history";
 import Grid from "@material-ui/core/Grid";
@@ -12,7 +16,11 @@ import Pagination from "../Components/Pagination";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import ReactToPrint from "react-to-print";
+<<<<<<< HEAD
 import Button from "react";
+=======
+import  Button  from "react";
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 
 import _ from "lodash";
 
@@ -48,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function ProductsList() {
+<<<<<<< HEAD
     const classes = useStyles();
     let componentRef = useRef();
     const user = useSelector((state) => state.auth);
@@ -110,6 +119,34 @@ export default function ProductsList() {
                 <Grid container direction="row" justify="center" alignItems="center">
                     You have not added any product yet
                 </Grid>
+=======
+  const classes = useStyles();
+  let componentRef = useRef();
+  const user = useSelector((state) => state.auth);
+  // console.log("user = ",user);
+  const productData = useSelector((state) => state.posts);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [expanded, setExpanded] = useState(false);
+  const [currentProducts, setCurrentProducts] = useState([]);
+  // const [loaded, setLoaded] = useState(false);
+  const [postsPerPage] = useState(8);
+  const dispatch = useDispatch();
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+  // console.log(productData)
+  useEffect(() => {
+    const token = window.localStorage.getItem("peraToken");
+    if(!token || user.role==="user")
+    {
+      history.push('/');
+    }
+  }, [setLoading, productData, user]);
+  const handleProductEdit = (id) => {
+    history.push(`/admin/editProduct/${id}`);
+  };
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 
             ) : (
                 currentProducts.map((product) => {
@@ -142,6 +179,7 @@ export default function ProductsList() {
                                             content={() => componentRef}
                                         /> */}
 
+<<<<<<< HEAD
                                     {/* component to be printed */}
                                     {/* <ProductsList ref={(el) => (componentRef = el)} /> */}
                                     {/* </div> */}
@@ -176,4 +214,98 @@ export default function ProductsList() {
             )}
         </Container>
     );
+=======
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  // let currentProducts = [];
+  // console.log(productData);
+  // if (!_.isEmpty(productData)) {
+  //   console.log("product data:",productData);
+  //   currentProducts = productData.slice(
+  //     indexOfFirstPost,
+  //     indexOfLastPost
+  //   );
+  // }
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  return (
+    <Container maxWidth="lg">
+      {_.isEmpty(productData) || loading ? (
+        <Box height="100vh">
+          <Box className={classes.CircularProgress}>
+            <CircularProgress color="primary" />
+          </Box>
+        </Box>
+      ) : productData.result.length === 0 ? (
+        <Grid container direction="row" justify="center" alignItems="center">
+          You have not added any product yet
+        </Grid>
+                
+      ) : (
+        productData.result.map((product) => {
+          // console.log(product);
+          return (
+            <Accordion
+              expanded={expanded === product._id}
+              onChange={handleChange(product._id)}
+              className={classes.root}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+              >
+                <Typography style={{marginRight:1000,marginTop:12}} className={classes.heading}>
+                  {product.title}
+                </Typography>
+                <Typography className={classes.secondaryHeading}>
+                  <IconButton
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => handleProductEdit(product._id)}
+                  >
+                    <EditIcon />
+                  </IconButton>
+            <div>
+                  {/* <ReactToPrint
+          trigger={() => <Button>Print this out!</Button>}
+          content={() => componentRef}
+        /> */}
+
+        {/* component to be printed */}
+        {/* <ProductsList ref={(el) => (componentRef = el)} /> */}
+      </div>
+                  <IconButton
+                  aria-label="delete"
+                  color="secondary"
+                    // variant="outlined"
+                    // color="primary"
+                    onClick={() => handleProductDelete(product._id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <ProductDetails product={product} />
+                {/* console.log(product); */}
+              </AccordionDetails>
+            </Accordion>
+          );
+        })
+      )}
+
+      {!_.isEmpty(productData) && productData.result.length > postsPerPage ? (
+        <Pagination
+          postsPerPage={postsPerPage}
+          totalPosts={productData.result.length}
+          paginate={paginate}
+        />
+      ) : (
+        ""
+      )}
+    </Container>
+  );
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 }

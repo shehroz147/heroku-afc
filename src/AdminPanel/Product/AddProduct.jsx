@@ -78,6 +78,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 export default function AddProduct() {
+<<<<<<< HEAD
     const user = useSelector((state) => state.auth);
     const categoryList = [
         { id: 1, name: "Poultry" },
@@ -98,6 +99,28 @@ export default function AddProduct() {
         { id: 2, name: "2x" },
         { id: 3, name: "4x" }
     ];
+=======
+  const user = useSelector((state) => state.auth);
+  const categoryList = [
+    { id: 1, name: "Health" },
+    { id: 2, name: "Fitness" },
+    { id: 3, name: "Better Life" },
+    { id: 4, name: "Be Strong" },
+    { id: 5, name: "Your Time" },
+    { id: 6, name: "Gym Beast" },
+  ];
+
+  useEffect(() => {
+    const token = window.localStorage.getItem("peraToken");
+
+    if (!token || !user.role === "Admin") {
+      return history.push("/");
+    }
+  });
+  // const [category, setCategory] = useState("");
+  const [selectedFiles, setFiles] = useState();
+  const [url, setURL] = useState("");
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 
     // const weightOptions = [
     //     {id:}
@@ -105,9 +128,107 @@ export default function AddProduct() {
     useEffect(() => {
         const token = window.localStorage.getItem("kareydarToken");
 
+<<<<<<< HEAD
         if (!token || !user.role === "admin") {
             return history.push("/");
         }
+=======
+  const handleFile = (e) => {
+    setFiles(e.target.files[0]);
+  };
+
+  let validationSchema = yup.object({
+    title: yup.string().required("Product name is required"), //maximum number of letters .max(54,"name cannot be more then 54 charcters long")
+    price: yup.number().required("price is required"),
+    tag: yup.string().required("Tag is required"),
+    description: yup.string(),
+    additionalInfo: yup.string(),
+  //  imageUrl:yup.string().required("imageUrl is required")
+    // largePrice: yup.number().notRequired("largePrice is required"),
+    // regularPrice: yup
+    //   .number()
+    //   .notRequired(
+    //     "regularPrice is not only apply if you want to offer regularPrice"
+    //   ),
+    // priceToBeAdded: yup.number().notRequired("size is required"),
+  });
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: {
+        title: "",
+        price: "",
+        tag: "",
+        
+        // largePrice: "",
+        // regularPrice: "",
+        // priceToBeAdded: "",
+        // size: "",
+      },
+      enableReinitialize: true,
+      validationSchema,
+      onSubmit: async (values, { resetForm }) => {
+        auth.signInAnonymously()
+  .then(() => {
+    // Signed in..
+    // const data = values
+    const uploadTask =   storage.ref(`/images/${selectedFiles.name}`).put(selectedFiles);
+    uploadTask.on("state_changed", console.log, console.error, () => {
+      storage
+        .ref("images")
+        .child(selectedFiles.name)
+        .getDownloadURL()
+        .then((url) => {
+          setFiles(null);
+          setURL(url); 
+          alert(url)
+          // console.log(data);
+          // const data = new FormData();
+
+
+
+          // for (var propName in values) {
+          //   //to remove any empty field
+          //   if (values[propName] === "") {
+          //     delete values[propName];
+          //   }
+          // }
+          // values.append("obj", JSON.stringify({...values,image:url}));
+          // const img =  FileResize(selectedFiles);
+          // data.append("image", img);
+          // console.log("aur bhaui")
+
+          // values['imageUrl']=url,
+
+          // alert(JSON.stringify(values))
+            
+          // const val = values
+          // data['imageUrl'] = val
+
+          dispatch(createProduct(values,url, setLoading));
+  
+          // resetForm({
+          //   values: "",
+          // });
+          // history.push("/productList");
+          setFiles(null);
+        })
+      })
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ...
+  });
+ 
+
+
+
+
+ 
+        // alert()
+       
+      },
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
     });
     // const [category, setCategory] = useState("");
     const [selectedFiles, setFiles] = useState();
@@ -117,6 +238,7 @@ export default function AddProduct() {
     const dispatch = useDispatch();
     const classes = useStyles();
 
+<<<<<<< HEAD
     const handleFile = (e) => {
         setFiles(e.target.files[0]);
     };
@@ -350,6 +472,110 @@ export default function AddProduct() {
                                 helperText={errors.price && touched.price ? errors.price : ""}
                             />
                             {/* {category === "FALOODA" ||
+=======
+  return (
+    <>
+      <Container maxWidth="lg">
+        {loading ? (
+          <Box height="100vh">
+            <Box className={classes.CircularProgress}>
+              <CircularProgress />
+            </Box>
+          </Box>
+        ) : (
+          <Box width="85%" className={classes.addProductForm}>
+            <form>
+              <TextField
+                id="outlined-required"
+                label="Title"
+                name="title"
+                variant="outlined"
+                fullWidth
+                margin="dense"
+                type="text"
+                value={values.title}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={errors.title && touched.title ? true : false}
+                helperText={errors.title && touched.title ? errors.title : ""}
+              />
+              <Box mt={1} mb={1}>
+                <Box width="100%">
+                  <FormControl variant="outlined">
+                    <InputLabel id="demo-simple-select-outlined-label">
+                      Tag
+                    </InputLabel>
+
+                    <Select
+                      id="demo-simple-select"
+                      inputProps={{
+                        name: "category",
+                        id: "age-simple",
+                      }}
+                      value={values.tag}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={errors.category && touched.category ? true : false}
+                    >
+                      {categoryList.map((category) => (
+                        <MenuItem value={category.name}>
+                          {category.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.category && touched.category ? (
+                      <FormHelperText> {errors.category} </FormHelperText>
+                    ) : (
+                      ""
+                    )}
+                  </FormControl>
+                </Box>
+              </Box>
+
+              <TextField
+                id="outlined-required"
+                label="Price"
+                name="price"
+                variant="outlined"
+                fullWidth
+                margin="dense"
+                type="number"
+                value={values.price}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={errors.price && touched.price ? true : false}
+                helperText={errors.price && touched.price ? errors.price : ""}
+              />
+              <TextField
+                id="outlined-required"
+                label="Description"
+                name="description"
+                variant="outlined"
+                fullWidth
+                margin="dense"
+                type="text"
+                value={values.description}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                // error={errors.price && touched.price ? true : false}
+                // helperText={errors.price && touched.price ? errors.price : ""}
+              />
+              <TextField
+                id="outlined-required"
+                label="Additional Info"
+                name="additionalInfo"
+                variant="outlined"
+                fullWidth
+                margin="dense"
+                type="text"
+                value={values.additionalInfo}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                // error={errors.price && touched.price ? true : false}
+                // helperText={errors.price && touched.price ? errors.price : ""}
+              />
+              {/* {category === "FALOODA" ||
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
               category === "FRESH" ||
               category === "JUICES" ||
               category === "SHAKES" ||

@@ -82,6 +82,7 @@ export default function AddCategory({
         setLoading(true);
         const orderList = orders.filter((o) => o._id !== order._id);
 
+<<<<<<< HEAD
         const token = window.localStorage.getItem("kareydarToken");
         try {
             await server.post(
@@ -103,6 +104,18 @@ export default function AddCategory({
             setLoading(false);
             console.log(e);
             alert("order status is not chnaged");
+=======
+    const token = window.localStorage.getItem("peraToken");
+    try {
+      await server.post(
+        `/admin/orderStatus/${order._id}`,
+        { status: orderStatus },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
         }
     };
     const handleClose = () => {

@@ -67,7 +67,7 @@ export default function ScoopTable({ product }) {
             </TableCell>
             <TableCell align="center">{product.title}</TableCell>
             <TableCell align="center">{product.price}</TableCell>
-            <TableCell align="center">{product.category}</TableCell>
+            <TableCell align="center">{product.tag}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

@@ -21,11 +21,14 @@ import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { useDispatch } from "react-redux";
 import { signIn } from "../Actions";
+<<<<<<< HEAD
 import Logo from '../Logo.jpg';
 import Background from '../house.png';
 // import history from "../history";
 import './Login.css'
 
+=======
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 const useStyles = makeStyles((theme) => ({
     root: {
         height: "90vh",
@@ -70,10 +73,35 @@ export default function Login() {
     }
 
 
+<<<<<<< HEAD
     let validationSchema = yup.object({
         email: yup.string().email().required("email is required"),
         password: yup.string().required("Password is required"),
     });
+=======
+    validationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      setLoading(true);
+      try {
+        const { data } = await server.post("admin/login", values);
+        console.log("The result is :",data);
+        dispatch(signIn(data._id, data.token));
+        // console.log({data});
+        // console.log(data.user);
+        // console.log(data.result._id);
+        // console.log(data);
+        setLoading(false);
+        resetForm({
+          values: "",
+        });
+      } catch (e) {
+        console.log(e.message);
+        setLoading(false);
+        setOpenAlert(true);
+      }
+    },
+  });
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 
 
 
@@ -161,6 +189,7 @@ export default function Login() {
                 </div>
 
 
+<<<<<<< HEAD
 
                 {/* <TextField
                         onChange={setEmail}
@@ -212,4 +241,29 @@ export default function Login() {
         </div>
 
     );
+=======
+              <Box mt={2} mb={1}>
+                <Grid
+                  direction="row"
+                  container
+                  justify="center"
+                  alignItems="center"
+                >
+                  <Button
+                    variant="contained"
+                    color = "primary"
+                    type="submit"
+                    style={{ borderRadius: "50px" }}
+                  >
+                    signin
+                  </Button>
+                </Grid>
+              </Box>
+            </form>
+          </Box>
+        </>
+      )}
+    </Container>
+  );
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 }

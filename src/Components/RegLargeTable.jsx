@@ -64,7 +64,7 @@ export default function RegLargeTable({ product }) {
             </TableCell>
             <TableCell align="center">{product.title}</TableCell>
             <TableCell align="center">{product.price}</TableCell>
-            <TableCell align="center">{product.category}</TableCell>
+            <TableCell align="center">{product.tag}</TableCell>
           </TableRow>
         </TableBody> 
       </Table>

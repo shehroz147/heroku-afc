@@ -44,6 +44,7 @@ export default function AdminOrders() {
     const [loading, setLoading] = useState(true);
     // const [open, setOpen] = useState(false);
 
+<<<<<<< HEAD
     useEffect(() => {
         const token = window.localStorage.getItem("kareydarToken");
         if (!token) {
@@ -63,6 +64,26 @@ export default function AdminOrders() {
             })
             .catch((e) => console.log(e.message));
     }, []);
+=======
+  useEffect(() => {
+    const token = window.localStorage.getItem("peraToken");
+    if (!token) {
+      return history.push("/auth/Login");
+    }
+    server
+      .get("/admin/getOrders", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setLoading(false);
+        setOrders([...res.data.data]);
+      })
+      .catch((e) => console.log(e.message));
+  }, []);
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 
     return (
         <Container maxWidth="lg" className={classes.root}>

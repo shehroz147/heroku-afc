@@ -4,11 +4,19 @@ import server from "../apis/server";
 
 export * from "./OrderActions";
 export const signIn = (user, token) => (dispatch) => {
+<<<<<<< HEAD
     dispatch({
         type: "SIGN_IN",
         payload: user,
     });
     window.localStorage.setItem("userToken", token);
+=======
+  dispatch({
+    type: "SIGN_IN",
+    payload: user,
+  });
+  window.localStorage.setItem("peraToken", token);
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 
     // setTimeout(()=>{
     // document.localStorage.removeItem("hamzaFlawsToken");
@@ -17,6 +25,7 @@ export const signIn = (user, token) => (dispatch) => {
 };
 
 export const signOut = () => (dispatch) => {
+<<<<<<< HEAD
     dispatch({
         type: "SIGN_OUT",
     });
@@ -50,6 +59,41 @@ export const createProduct = (data, url, setLoading) => async (dispatch) => {
         await server.post("/admin/addProduct", send);
         // console.log(response);
         dispatch({ type: "CREATE_PRODUCT", payload: data });
+=======
+  dispatch({
+    type: "SIGN_OUT",
+  });
+  window.localStorage.removeItem("peraToken");
+  history.push("/");
+};
+
+export const loggedInUser = () => async (dispatch) => {
+  try {
+    const token = window.localStorage.getItem("peraToken");
+    const { data } = await server.get(`/loggedInUser`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    dispatch({
+      type: "SIGN_IN",
+      payload: data,
+    });
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+export const createProduct = (data,url, setLoading) => async (dispatch) => {
+  try {
+    setLoading(true);
+    const send = data
+    send.imageUrl = url
+    const token = window.localStorage.getItem("peraToken");
+      await server.post("/admin/addProduct",send);
+    // console.log(response);
+    dispatch({ type: "CREATE_PRODUCT", payload: data });
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 
         setLoading(false);
         history.push("/productList");
@@ -69,6 +113,7 @@ export const fetchProducts = () => async (dispatch, getState) => {
 };
 
 export const editProduct = (id, data, setLoading) => async (dispatch) => {
+<<<<<<< HEAD
     try {
         setLoading(true);
         const token = window.localStorage.getItem("kareydarToken");
@@ -77,6 +122,16 @@ export const editProduct = (id, data, setLoading) => async (dispatch) => {
                 Authorization: `Bearer ${token}`,
             },
         });
+=======
+  try {
+    setLoading(true);
+    const token = window.localStorage.getItem("peraToken");
+    const response = await server.patch(`/admin/editProduct/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 
         dispatch({ type: "EDIT_PRODUCT", payload: response.data });
 
@@ -89,8 +144,13 @@ export const editProduct = (id, data, setLoading) => async (dispatch) => {
 };
 
 export const deleteProduct = (id, setLoading) => async (dispatch) => {
+<<<<<<< HEAD
     try {
         const token = window.localStorage.getItem("kareydarToken");
+=======
+  try {
+    const token = window.localStorage.getItem("peraToken");
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 
         await server.delete(`/admin/deleteProduct/${id}`, {
             headers: {

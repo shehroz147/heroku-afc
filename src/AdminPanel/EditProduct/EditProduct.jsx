@@ -64,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
 export default function EditProduct(props) {
     const user = useSelector((state) => state.auth);
 
+<<<<<<< HEAD
     const [product, setProduct] = useState({
         title: "",
         price: "",
@@ -87,6 +88,31 @@ export default function EditProduct(props) {
         // { id: 11, name: "SOUP" },
         // { id: 12, name: "CHAAT" },
     ];
+=======
+  const [product, setProduct] = useState({
+    title: "",
+    price: "",
+    category: "",
+    // largePrice: "",
+    // regularPrice: "",
+    // priceToBeAdded: "",
+    imageUrl: "",
+  });
+  const categoryList = [
+    { id: 1, name: "Health" },
+    { id: 2, name: "Fitness" },
+    { id: 3, name: "Better Life" },
+    { id: 4, name: "Be Strong" },
+    { id: 5, name: "Your Time" },
+    { id: 6, name: "Gym Beast" },
+    // { id: 7, name: "FALOODA" },
+    // { id: 8, name: "SHAKES" },
+    // { id: 9, name: "HAMZA SPECIAL JUICE" },
+    // { id: 10, name: "FRESH JUICES" },
+    // { id: 11, name: "SOUP" },
+    // { id: 12, name: "CHAAT" },
+  ];
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 
     const [selectedFiles, setFiles] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -95,8 +121,13 @@ export default function EditProduct(props) {
     const dispatch = useDispatch();
     const classes = useStyles();
 
+<<<<<<< HEAD
     useEffect(() => {
         const token = window.localStorage.getItem("kareydarToken");
+=======
+  useEffect(() => {
+    const token = window.localStorage.getItem("peraToken");
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 
         if (!token || !user.role === "admin") {
             return history.push("/");

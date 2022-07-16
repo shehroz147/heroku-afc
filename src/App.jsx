@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loggedInUser, fetchProducts } from "./Actions";
 import theme from "./Theme";
 import { ThemeProvider } from "@material-ui/core/styles";
@@ -27,6 +27,7 @@ import PartiesAccount from "./PartiesAccount/PartiesAccount";
 // import AddIcon from "@material-ui/icons/Add";
 
 export default function App() {
+<<<<<<< HEAD
     // const dispatch = useDispatch();
 
     // useEffect(() => {
@@ -69,4 +70,36 @@ export default function App() {
             </ThemeProvider>
         </>
     );
+=======
+  const dispatch = useDispatch();
+  // const productData = useSelector((state) => state.posts);
+  useEffect(() => {
+    dispatch(fetchProducts());
+    // console.log("The products are:",productData);
+    const token = window.localStorage.getItem("peraToken");
+    if (token) {
+      dispatch(loggedInUser());
+    }
+  });
+  return (
+    <>
+      <ThemeProvider theme={theme}>
+        <Router history={history}>
+          <Nav />
+          <Switch>
+            <Route exact path="/" component={Login} />
+            <Route exact path="/orders" component={Orders} />
+            <Route exact path="/productList" component={ProductList} />
+            <Route exact path="/addProduct" component={AddProduct} />
+            <Route
+              exact
+              path="/admin/editProduct/:id"
+              component={EditProduct}
+            />
+          </Switch>
+        </Router>
+      </ThemeProvider>
+    </>
+  );
+>>>>>>> b0d4a3ccb0c1237767d7d7b45dcadabfa9d5c1f8
 }
